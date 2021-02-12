@@ -32,3 +32,5 @@ class CarViewset(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.Generi
 class RatingViewset(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
     serializer_class = RatingSerializer
+
+#TODO: top cars viewset

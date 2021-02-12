@@ -12,6 +12,7 @@ class CarSerializer(serializers.ModelSerializer):
         model = Car
         fields = '__all__'
 
+#TODO: explicit validation?
 
 class CarPostSerializer(serializers.Serializer):
 
