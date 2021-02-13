@@ -21,3 +21,10 @@ def server_error_response(model):
         "status": "fail",
         "data": model
     }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+def car_already_exists_response(model):
+    return Response({
+        "status": "fail",
+        "data": model
+    }, status=status.HTTP_409_CONFLICT)

@@ -34,7 +34,7 @@ class CarPostSerializer(serializers.Serializer):
         return Car.objects.create(**validated_data)
 
 
-class RatingSerializer(serializers.Serializer):
+class RatingPostSerializer(serializers.Serializer):
 
     car = serializers.PrimaryKeyRelatedField(
         required=True, queryset=Car.objects.all())

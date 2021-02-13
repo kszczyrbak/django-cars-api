@@ -1,12 +1,12 @@
 from rest_framework import viewsets, mixins
 from .models import Car, Rating
-from .serializers import CarSerializer, CarPostSerializer, RatingSerializer, PopularCarSerializer
-from .responses import bad_request_response, model_saved_response, server_error_response
+from .serializers import CarSerializer, CarPostSerializer, RatingPostSerializer, PopularCarSerializer
+from .responses import bad_request_response, model_saved_response, server_error_response, car_already_exists_response
 from django.db.models import Avg, Value, Count
 from django.db.models.functions import Coalesce
 from .services import CarVPICApiService
 from .filters import CarFilter, PopularCarFilter
-from django.db import Error
+from django.db import IntegrityError, Error
 
 
 class CarViewset(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
@@ -27,8 +27,11 @@ class CarViewset(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.Generi
         if CarVPICApiService.validate_make_and_model(make, model):
             try:
                 car = car_serializer.save()
+            except IntegrityError:
+                return car_already_exists_response(data)
             except Error:
-                return server_error_response(CarSerializer(car).data)
+                return server_error_response(data)
+
             return model_saved_response(CarSerializer(car).data)
 
         return bad_request_response(car_serializer.errors)
@@ -41,11 +44,11 @@ class CarViewset(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.Generi
 
 class RatingViewset(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
-    serializer_class = RatingSerializer
+    serializer_class = RatingPostSerializer
 
     def create(self, request, *args, **kwargs):
 
-        rating_serializer = RatingSerializer(data=request.data)
+        rating_serializer = RatingPostSerializer(data=request.data)
 
         if not rating_serializer.is_valid():
             return bad_request_response(rating_serializer.errors)
@@ -55,8 +58,8 @@ class RatingViewset(mixins.CreateModelMixin, viewsets.GenericViewSet):
         try:
             rating = rating_serializer.save()
         except Error:
-            return server_error_response(RatingSerializer(rating).data)
-        return model_saved_response(RatingSerializer(rating).data)
+            return server_error_response(data)
+        return model_saved_response(RatingPostSerializer(rating).data)
 
 
 class PopularCarViewset(mixins.ListModelMixin, viewsets.GenericViewSet):

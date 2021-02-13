@@ -1,8 +1,4 @@
 import requests
-
-# TODO: class based services?
-
-
 class CarVPICApiService:
 
     @staticmethod
