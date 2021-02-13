@@ -54,7 +54,7 @@ class PopularCarListTestCase(APITestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_popular_ordering(self):
-        """Popular cars are returned in descending order"""
+        """Popular cars are sorted by num_ratings descending"""
 
         response = self.client.get('/api/popular/')
         data = response.data['results']
