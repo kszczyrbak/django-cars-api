@@ -1,6 +1,7 @@
 from .models import Car, Rating
 
 from rest_framework import serializers
+from django.db import Error
 
 
 class CarSerializer(serializers.ModelSerializer):
@@ -22,6 +23,7 @@ class PopularCarSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 # TODO: explicit validation?
+
 
 class CarPostSerializer(serializers.Serializer):
 

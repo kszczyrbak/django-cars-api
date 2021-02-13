@@ -1,11 +1,12 @@
 from rest_framework import viewsets, mixins
 from .models import Car, Rating
 from .serializers import CarSerializer, CarPostSerializer, RatingSerializer, PopularCarSerializer
-from .responses import bad_request_response, car_saved_response
+from .responses import bad_request_response, model_saved_response, server_error_response
 from django.db.models import Avg, Value, Count
 from django.db.models.functions import Coalesce
 from .services import CarVPICApiService
 from .filters import CarFilter, PopularCarFilter
+from django.db import Error
 
 
 class CarViewset(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
@@ -24,8 +25,11 @@ class CarViewset(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.Generi
         data = car_serializer.validated_data
         make, model = data['make'], data['model']
         if CarVPICApiService.validate_make_and_model(make, model):
-            car = car_serializer.save()
-            return car_saved_response(CarSerializer(car).data)
+            try:
+                car = car_serializer.save()
+            except Error:
+                return server_error_response(CarSerializer(car).data)
+            return model_saved_response(CarSerializer(car).data)
 
         return bad_request_response(car_serializer.errors)
 
@@ -38,6 +42,21 @@ class CarViewset(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.Generi
 class RatingViewset(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
     serializer_class = RatingSerializer
+
+    def create(self, request, *args, **kwargs):
+
+        rating_serializer = RatingSerializer(data=request.data)
+
+        if not rating_serializer.is_valid():
+            return bad_request_response(rating_serializer.errors)
+
+        data = rating_serializer.validated_data
+
+        try:
+            rating = rating_serializer.save()
+        except Error:
+            return server_error_response(RatingSerializer(rating).data)
+        return model_saved_response(RatingSerializer(rating).data)
 
 
 class PopularCarViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
