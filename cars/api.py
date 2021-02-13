@@ -15,6 +15,13 @@ class CarViewset(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.Generi
         rating=Coalesce(Avg('ratings__value'), Value('0')))
     filterset_class = CarFilter
 
+    def __is_in_vpic_response(self, model_name, response):
+        for unit in response['Results']:
+            model = unit['Model_Name']
+            if model.lower() == model_name.lower():
+                return True
+        return False
+
     def create(self, request, *args, **kwargs):
 
         car_serializer = CarPostSerializer(data=request.data)
@@ -24,7 +31,8 @@ class CarViewset(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.Generi
 
         data = car_serializer.validated_data
         make, model = data['make'], data['model']
-        if CarVPICApiService.validate_make_and_model(make, model):
+        vpic_response = CarVPICApiService.get_models_by_make(make)
+        if self.__is_in_vpic_response(model, vpic_response):
             try:
                 car = car_serializer.save()
             except IntegrityError:
