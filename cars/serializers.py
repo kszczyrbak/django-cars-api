@@ -12,7 +12,16 @@ class CarSerializer(serializers.ModelSerializer):
         model = Car
         fields = '__all__'
 
-#TODO: explicit validation?
+
+class PopularCarSerializer(serializers.ModelSerializer):
+
+    num_ratings = serializers.IntegerField(default=0)
+
+    class Meta:
+        model = Car
+        fields = '__all__'
+
+# TODO: explicit validation?
 
 class CarPostSerializer(serializers.Serializer):
 

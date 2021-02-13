@@ -17,7 +17,7 @@ class CarVPICApiService:
     def validate_make_and_model(make, model):
         models_response = CarVPICApiService.get_models_by_make(make)
 
-        return __find_model_in_vpic_response(models_response, model)
+        return CarVPICApiService.__find_model_in_vpic_response(models_response, model)
 
     @staticmethod
     def __find_model_in_vpic_response(response, model_name):

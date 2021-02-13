@@ -1,13 +1,18 @@
 from rest_framework import viewsets, mixins
 from .models import Car, Rating
-from .serializers import CarSerializer, CarPostSerializer, RatingSerializer
+from .serializers import CarSerializer, CarPostSerializer, RatingSerializer, PopularCarSerializer
 from .responses import bad_request_response, car_saved_response
-from django.db.models import Avg, Value
+from django.db.models import Avg, Value, Count
 from django.db.models.functions import Coalesce
 from .services import CarVPICApiService
+from .filters import CarFilter, PopularCarFilter
 
 
 class CarViewset(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
+
+    queryset = Car.objects.all().annotate(
+        rating=Coalesce(Avg('ratings__value'), Value('0')))
+    filterset_class = CarFilter
 
     def create(self, request, *args, **kwargs):
 
@@ -29,20 +34,15 @@ class CarViewset(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.Generi
             return CarPostSerializer
         return CarSerializer
 
-    def get_queryset(self):
-        queryset = Car.objects.all().annotate(
-            rating=Coalesce(Avg('ratings__value'), Value('0')))
-
-        make = self.request.query_params.get('make', None)
-        if make:
-            queryset = queryset.filter(make=make.lower())
-        model = self.request.query_params.get('model', None)
-        if model:
-            queryset = queryset.filter(model=model.lower())
-
 
 class RatingViewset(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
     serializer_class = RatingSerializer
 
-# TODO: top cars viewset
+
+class PopularCarViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
+
+    queryset = Car.objects.all().annotate(num_ratings=Coalesce(
+        Count('ratings'), Value(0))).order_by('-num_ratings')
+    serializer_class = PopularCarSerializer
+    filter_class = PopularCarFilter
