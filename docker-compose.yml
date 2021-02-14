@@ -11,9 +11,9 @@ services:
     depends_on:
       - db
     env_file:
-      - .env
+      - docker.env
 
   db:
     image: postgres
     env_file:
-      - .env
+      - docker.env
