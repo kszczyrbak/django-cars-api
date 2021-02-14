@@ -9,6 +9,9 @@ class Car(models.Model):
 
     model = models.CharField(max_length=50, unique=True, blank=False)
 
+    def __str__(self):
+        return f"{self.make} {self.model}"
+
 
 class Rating(models.Model):
 
@@ -16,3 +19,6 @@ class Rating(models.Model):
 
     car = models.ForeignKey(
         Car, on_delete=models.CASCADE, related_name='ratings', blank=False)
+
+    def __str__(self):
+        return f"{self.car}: {self.value}"
