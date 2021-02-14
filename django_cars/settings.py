@@ -49,18 +49,14 @@ MIDDLEWARE = [
     "whitenoise.middleware.WhiteNoiseMiddleware"
 ]
 
-# BrowsableAPI is enabled on production for the accessibility of testing the API on the deployed instance.
-# Commented code is how it could be done to enable BrowsableAPI for development but fallback to the default JSON on production.
-
 DEFAULT_RENDERER_CLASSES = (
-    #     'rest_framework.renderers.JSONRenderer',
-    'rest_framework.renderers.BrowsableAPIRenderer',
+    'rest_framework.renderers.JSONRenderer',
 )
 
-# if DEBUG:
-#     DEFAULT_RENDERER_CLASSES = DEFAULT_RENDERER_CLASSES + (
-#         'rest_framework.renderers.BrowsableAPIRenderer',
-#     )
+if DEBUG:
+    DEFAULT_RENDERER_CLASSES = DEFAULT_RENDERER_CLASSES + (
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    )
 
 
 REST_FRAMEWORK = {
