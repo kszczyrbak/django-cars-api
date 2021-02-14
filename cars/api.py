@@ -7,6 +7,7 @@ from django.db.models.functions import Coalesce
 from .services import CarVPICApiService
 from .filters import CarFilter, PopularCarFilter
 from django.db import IntegrityError, Error
+from rest_framework import filters
 
 
 class CarViewset(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
@@ -14,6 +15,9 @@ class CarViewset(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.Generi
     queryset = Car.objects.all().annotate(
         rating=Coalesce(Avg('ratings__value'), Value('0')))
     filterset_class = CarFilter
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields = ['make', 'model', 'rating']
+    ordering = ['rating']
 
     def __is_in_vpic_response(self, model_name, response):
         for unit in response['Results']:
