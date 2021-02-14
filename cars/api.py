@@ -1,7 +1,7 @@
 from rest_framework import viewsets, mixins
 from .models import Car, Rating
 from .serializers import CarSerializer, CarPostSerializer, RatingPostSerializer, PopularCarSerializer
-from .responses import bad_request_response, model_saved_response, server_error_response, car_already_exists_response
+from .responses import bad_request_response, model_saved_response, server_error_response, model_already_exists_response
 from django.db.models import Avg, Value, Count
 from django.db.models.functions import Coalesce
 from .services import CarVPICApiService
@@ -40,13 +40,13 @@ class CarViewset(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.Generi
             try:
                 car = car_serializer.save()
             except IntegrityError:
-                return car_already_exists_response(data)
+                return model_already_exists_response(data)
             except Error:
                 return server_error_response(data)
 
             return model_saved_response(CarSerializer(car).data)
 
-        return bad_request_response(car_serializer.errors)
+        return bad_request_response(car_serializer.data, car_serializer.errors)
 
     def get_serializer_class(self):
         if self.action == 'create':
