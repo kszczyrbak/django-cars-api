@@ -6,7 +6,7 @@ Simple Django Rest Framework app providing a REST API for a basic makes and mode
 
 Django cars API is hosted on heroku: https://kszczyrbak-django-cars.herokuapp.com
 
-# Run the app
+# Running the app
 
 There are two ways to run this app - locally or using docker-compose.
 First, clone this repo to a directory of your choice. The directory containing this README will be the work directory for all of the CLI commands afterwards.
@@ -76,6 +76,22 @@ The created API consists of four endpoints:
 | /api/rate    | POST | Rate a car                      | -           | -                   |
 | /api/popular | GET  | Get a list of most popular cars | make        | -                   |
 
+## Pagination
+
+This API uses limit/offset pagination. The default limit is set to 10, you can modify that value in `settings.py` `REST_FRAMEWORK` dictionary.
+
+You can use the limit and offset query params to modify the size of result set.
+
+The result sets contain hyperlinks to next and previous pages of your query, supposing the same limit size. If the `next` or `previous` fields are `null`, that means there aren't any other cars in the API to return in another query. 
+### Examples:
+
+`GET https://kszczyrbak-django-cars.herokuapp.com/api/cars/?limit=5`
+
+* Returns 5 first cars of a set of all cars in the API.
+
+`https://kszczyrbak-django-cars.herokuapp.com/api/cars/?limit=2&offset=1`
+
+* Returns first 2 cars after the first car in the API.
 ## Filtering and ordering
 
 Options specified in filtering and ordering fields of the table can be used in query params to accordingly filter and/or order the returned response set.
