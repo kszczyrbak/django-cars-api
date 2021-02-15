@@ -19,6 +19,8 @@ Install Docker for the OS of your choice.
 
 In this directory, create a `docker.env` file, copying the environment variables from the `.env.template` file and filling them according to the instructions in the comments.
 
+**Make sure to put every variable and its value in a separate line!**
+
 Make sure Docker backend is running, then:
 ```
 docker-compose build
@@ -41,6 +43,9 @@ First, install the requirements to the virutal or global Python environment:
 Before running the Django app, you have to set the configuration variables. The necessary variables are listed in the `.env.template` file. You can either:
 * Set the environment variables specified in the template file manually, or
 * Use the installed `dotenv` package, to set those variables locally, using the .template file. Make sure that the path to the created .env file in `settings.py load_dotenv` function is correct.
+
+**When using .env, make sure to put every variable and its value in a separate line!**
+
 
 Then, go back to the project directory, and perform migrations on the database:
 
