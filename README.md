@@ -112,3 +112,15 @@ Options specified in filtering and ordering fields of the table can be used in q
 * Returns a set of cars made by Audi, sorted by their model name in ascending order.
 
  **Filtering param values are case insensitive, but match only the exact value - be wary of spelling mistakes!**
+ 
+ # Chosen technologies
+ 
+ ## Database
+ PostgreSQL - Pairs well with Django, also it's the db I'm most familiar with
+ 
+ ## Additional packages
+ Requests - Standard choice to perform HTTP requests for external API's
+ Django-filter - Easy to use class-based filtering and ordering for viewsets
+ Gunicorn - Popular choice for production WSGI servers
+ WhiteNoise - Pairs well with Django, allows to serve static files easier in WSGI apps
+ 
