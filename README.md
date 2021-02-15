@@ -56,6 +56,14 @@ or, but only if you are not on Windows, use the installed Gunicorn WSGI:
 
 `gunicorn django_cars.wsgi`
 
+# Running tests
+
+To run the tests, use:
+
+`python manage.py test`
+
+To run tests in Docker environment, connect to the shell of running instance and run that same command.
+
 # API Specification
 
 The created API consists of four endpoints:
