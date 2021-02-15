@@ -125,4 +125,4 @@ class CarCreateTestCase(APITestCase):
 
         response = self.client.post(
             '/api/cars/', data=self.test_car_post_body)
-        self.assertEqual(response.status_code, 400)
+        self.assertContains(response, "That car doesn't exist in vPIC database", status_code=400)
