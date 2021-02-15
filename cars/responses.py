@@ -11,6 +11,14 @@ def bad_request_response(data, errors=""):
     }, status=status.HTTP_400_BAD_REQUEST)
 
 
+def car_doesnt_exist_response(data):
+    return Response({
+        "status": "fail",
+        "data": data,
+        "message": "That car doesn't exist in vPIC database. Please check the make and model.",
+    }, status=status.HTTP_400_BAD_REQUEST)
+
+
 def model_saved_response(model):
     return Response({
         "status": "success",
