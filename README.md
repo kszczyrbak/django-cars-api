@@ -120,7 +120,10 @@ Options specified in filtering and ordering fields of the table can be used in q
  
  ## Additional packages
  Requests - Standard choice to perform HTTP requests for external API's
+ 
  Django-filter - Easy to use class-based filtering and ordering for viewsets
+ 
  Gunicorn - Popular choice for production WSGI servers
+ 
  WhiteNoise - Pairs well with Django, allows to serve static files easier in WSGI apps
  
